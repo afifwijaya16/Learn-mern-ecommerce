@@ -1,14 +1,37 @@
 import React, { useState } from "react";
 import { auth } from "../../firebase";
 import { toast } from "react-toastify";
-import { Button } from "antd";
+import { Button, Spin } from "antd";
 import { MailOutlined } from "@ant-design/icons";
+import { useHistory } from "react-router-dom";
+import { useDispatch } from "react-redux";
 const Login = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("afif0071997@gmail.com");
+  const [password, setPassword] = useState("123456");
+  const [loading, setLoading] = useState(false);
+  const dispatch = useDispatch();
+  const history = useHistory();
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(email, password);
+    setLoading(true);
+    try {
+      const result = await auth.signInWithEmailAndPassword(email, password);
+      const { user } = result;
+      const idTokenResult = await user.getIdTokenResult();
+      console.log(idTokenResult);
+      dispatch({
+        type: "LOGGED_IN_USER",
+        payload: {
+          email: user.email,
+          token: idTokenResult.token,
+        },
+      });
+      history.push("/");
+    } catch (error) {
+      console.log(error);
+      toast.error(error.message);
+      setLoading(false);
+    }
   };
   const LoginForm = () => (
     <form onSubmit={handleSubmit}>
@@ -47,14 +70,18 @@ const Login = () => {
     </form>
   );
   return (
-    <div className="container p-5">
-      <div className="row">
-        <div className="col-md-6 offset-md-3">
-          <h5 className="text-center">Login</h5>
-          {LoginForm()}
+    <>
+      <Spin spinning={loading}>
+        <div className="container p-5">
+          <div className="row">
+            <div className="col-md-6 offset-md-3">
+              <h5 className="text-center">Login</h5>
+              {LoginForm()}
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
+      </Spin>
+    </>
   );
 };
 
