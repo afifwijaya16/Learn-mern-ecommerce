@@ -10,7 +10,7 @@ import {
 import { Link } from "react-router-dom";
 
 import firebase from "firebase/app";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 const { SubMenu, Item } = Menu;
 
@@ -18,6 +18,7 @@ const Header = () => {
   const [current, setCurrent] = useState("home");
   let dispatch = useDispatch();
   let history = useHistory();
+  let { user } = useSelector((state) => ({ ...state }));
   const handleClick = (e) => {
     setCurrent(e.key);
   };
@@ -36,18 +37,29 @@ const Header = () => {
         <Link to="/">Home</Link>
       </Item>
 
-      <Item key="register" className="float-right" icon={<UserAddOutlined />}>
-        <Link to="/register">Register</Link>
-      </Item>
-      <Item key="login" className="float-right" icon={<LoginOutlined />}>
-        <Link to="/login">Login</Link>
-      </Item>
-      <SubMenu key="SubMenu" icon={<UserOutlined />} title="Username">
-        <Item key="setting:1">Option 1</Item>
-        <Item icon={<LogoutOutlined />} onClick={logout}>
-          Logout
+      {!user && (
+        <Item key="register" className="float-right" icon={<UserAddOutlined />}>
+          <Link to="/register">Register</Link>
         </Item>
-      </SubMenu>
+      )}
+      {!user && (
+        <Item key="login" className="float-right" icon={<LoginOutlined />}>
+          <Link to="/login">Login</Link>
+        </Item>
+      )}
+      {user && (
+        <SubMenu
+          key="SubMenu"
+          icon={<UserOutlined />}
+          className="float-right"
+          title={user.email && user.email.split("@")[0]}
+        >
+          <Item key="setting:1">Option 1</Item>
+          <Item icon={<LogoutOutlined />} onClick={logout}>
+            Logout
+          </Item>
+        </SubMenu>
+      )}
     </Menu>
   );
 };
