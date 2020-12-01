@@ -5,15 +5,30 @@ import {
   UserOutlined,
   UserAddOutlined,
   LoginOutlined,
+  LogoutOutlined,
 } from "@ant-design/icons";
 import { Link } from "react-router-dom";
+
+import firebase from "firebase/app";
+import { useDispatch } from "react-redux";
+import { useHistory } from "react-router-dom";
 const { SubMenu, Item } = Menu;
 
 const Header = () => {
   const [current, setCurrent] = useState("home");
+  let dispatch = useDispatch();
+  let history = useHistory();
   const handleClick = (e) => {
-    console.log(e.key);
     setCurrent(e.key);
+  };
+
+  const logout = () => {
+    firebase.auth().signOut();
+    dispatch({
+      type: "LOG_OUT",
+      payload: null,
+    });
+    history.push("/login");
   };
   return (
     <Menu onClick={handleClick} selectedKeys={[current]} mode="horizontal">
@@ -29,7 +44,9 @@ const Header = () => {
       </Item>
       <SubMenu key="SubMenu" icon={<UserOutlined />} title="Username">
         <Item key="setting:1">Option 1</Item>
-        <Item key="setting:2">Option 2</Item>
+        <Item icon={<LogoutOutlined />} onClick={logout}>
+          Logout
+        </Item>
       </SubMenu>
     </Menu>
   );
