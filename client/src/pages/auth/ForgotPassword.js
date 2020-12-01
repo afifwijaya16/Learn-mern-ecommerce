@@ -6,6 +6,12 @@ import { Spin } from "antd";
 const ForgotPassword = ({ history }) => {
   const [email, setEmail] = useState("");
   const [loading, setloading] = useState(false);
+
+  const { user } = useSelector((state) => ({ ...state }));
+  useEffect(() => {
+    if (user && user.token) history.push("/");
+  }, [user]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setloading(true);
