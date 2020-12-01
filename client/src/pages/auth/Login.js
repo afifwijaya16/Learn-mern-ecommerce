@@ -3,8 +3,9 @@ import { auth, googleAuthProvider } from "../../firebase";
 import { toast } from "react-toastify";
 import { Button, Spin } from "antd";
 import { MailOutlined, GoogleOutlined } from "@ant-design/icons";
-import { useHistory } from "react-router-dom";
+import { useHistory, Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
+
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -109,6 +110,12 @@ const Login = () => {
               >
                 Login With Google
               </Button>
+              <Link
+                to="forgot/password"
+                className="my-2 float-right text-danger"
+              >
+                Forgot Password
+              </Link>
             </div>
           </div>
         </div>
