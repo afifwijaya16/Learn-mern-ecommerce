@@ -19,11 +19,12 @@ const Register = () => {
   const registerForm = () => (
     <form onSubmit={handleSubmit}>
       <div className="form-group">
+        <label>Email</label>
         <input
           type="email"
           className="form-control"
           value={email}
-          placeholder="Enter Email..."
+          placeholder="Your Email..."
           autoFocus
           onChange={(e) => setEmail(e.target.value)}
         />
