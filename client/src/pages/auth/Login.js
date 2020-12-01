@@ -1,13 +1,13 @@
 import React, { useState } from "react";
-import { auth } from "../../firebase";
+import { auth, googleAuthProvider } from "../../firebase";
 import { toast } from "react-toastify";
 import { Button, Spin } from "antd";
-import { MailOutlined } from "@ant-design/icons";
+import { MailOutlined, GoogleOutlined } from "@ant-design/icons";
 import { useHistory } from "react-router-dom";
 import { useDispatch } from "react-redux";
 const Login = () => {
-  const [email, setEmail] = useState("afif0071997@gmail.com");
-  const [password, setPassword] = useState("123456");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
   const history = useHistory();
@@ -18,7 +18,6 @@ const Login = () => {
       const result = await auth.signInWithEmailAndPassword(email, password);
       const { user } = result;
       const idTokenResult = await user.getIdTokenResult();
-      console.log(idTokenResult);
       dispatch({
         type: "LOGGED_IN_USER",
         payload: {
@@ -31,7 +30,29 @@ const Login = () => {
       console.log(error);
       toast.error(error.message);
       setLoading(false);
+      setEmail("");
+      setPassword("");
     }
+  };
+  const googleLogin = () => {
+    auth
+      .signInWithPopup(googleAuthProvider)
+      .then(async (result) => {
+        const { user } = result;
+        const idTokenResult = await user.getIdTokenResult();
+        dispatch({
+          type: "LOGGED_IN_USER",
+          payload: {
+            email: user.email,
+            token: idTokenResult.token,
+          },
+        });
+        history.push("/");
+      })
+      .catch((err) => {
+        console.log(err);
+        toast.error(err.message);
+      });
   };
   const LoginForm = () => (
     <form onSubmit={handleSubmit}>
@@ -69,14 +90,25 @@ const Login = () => {
       </Button>
     </form>
   );
+
   return (
     <>
-      <Spin spinning={loading}>
+      <Spin spinning={loading} size="large" tip="Loading...">
         <div className="container p-5">
           <div className="row">
             <div className="col-md-6 offset-md-3">
               <h5 className="text-center">Login</h5>
               {LoginForm()}
+              <Button
+                type="danger"
+                shape="round"
+                block
+                onClick={googleLogin}
+                icon={<GoogleOutlined />}
+                size="large"
+              >
+                Login With Google
+              </Button>
             </div>
           </div>
         </div>
