@@ -1,0 +1,12 @@
+# test api
+GET http://localhost:8000/api
+
+#### signup
+POST http://localhost:2000/api/signup
+
+Content-Type: application/json
+{
+    "username" : "1",
+    "email" : "1",
+    "password" : "1"
+}
