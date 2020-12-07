@@ -1,5 +1,5 @@
-exports.myfunction = (req, res) => {
+exports.createOrUpdateUser = (req, res) => {
 	res.json({
-		data: 'hey you tes node api',
+		data: 'hey you createOrUpdateUser node api',
 	});
 };
