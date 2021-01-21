@@ -1,7 +1,9 @@
 import React from 'react';
-import { Route, Link } from 'react-router-dom';
+import { Route } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { Spin } from 'antd';
+
+import LoadingToRedirect from './LoadingToRedirect';
+
 const UserRoute = ({ children, ...rest }) => {
 	const { user } = useSelector((state) => ({ ...state }));
 
@@ -12,9 +14,7 @@ const UserRoute = ({ children, ...rest }) => {
 			className="container-fluid d-flex justify-content-center align-items-center"
 			style={{ height: '600px' }}
 		>
-			<h1>
-				<Spin size="large" tip="Loading..." />
-			</h1>
+			<LoadingToRedirect />
 		</div>
 	);
 };

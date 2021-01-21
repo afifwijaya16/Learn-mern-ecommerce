@@ -13,7 +13,9 @@ import ForgotPassword from './pages/auth/ForgotPassword';
 import Home from './pages/Home';
 import Header from './components/nav/Header';
 import History from './pages/user/History';
-
+import NotFoundPage from './pages/NotFoundPage';
+import Password from './pages/user/Password';
+import Wishlist from './pages/user/Wishlist';
 // protected route
 import UserRoute from './components/routes/UserRoute';
 // firebase
@@ -58,7 +60,11 @@ const App = () => {
 				<Route exact path="/register" component={Register} />
 				<Route exact path="/register/complete" component={RegisterComplete} />
 				<Route exact path="/forgot/password" component={ForgotPassword} />
+				<Route exact path="/user/password" component={Password} />
+				<Route exact path="/user/wishlist" component={Wishlist} />
 				<UserRoute exact path="/user/history" component={History} />
+
+				<Route path="*" component={NotFoundPage} />
 			</Switch>
 		</>
 	);
