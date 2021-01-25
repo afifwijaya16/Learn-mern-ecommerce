@@ -20,7 +20,6 @@ const LoadingToRedirect = () => {
 			<h1>
 				<Spin size="large" tip={`Redirect you in ` + count + ` seconds`} />
 			</h1>
-			<h2>404 NOT FOUND PAGE</h2>
 		</div>
 	);
 };
