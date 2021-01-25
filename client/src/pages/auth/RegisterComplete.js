@@ -11,7 +11,7 @@ const RegisterComplete = ({ history }) => {
 	useEffect(() => {
 		setEmail(window.localStorage.getItem('EmailforRegistration'));
 		// console.log(window.location.href);
-	}, []);
+	}, [history]);
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 		if (!email && !password) {

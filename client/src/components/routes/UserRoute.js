@@ -8,7 +8,7 @@ const UserRoute = ({ children, ...rest }) => {
 	const { user } = useSelector((state) => ({ ...state }));
 
 	return user && user.token ? (
-		<Route {...rest} render={() => children} />
+		<Route {...rest} />
 	) : (
 		<div
 			className="container-fluid d-flex justify-content-center align-items-center"

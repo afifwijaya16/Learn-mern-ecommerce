@@ -12,12 +12,17 @@ import RegisterComplete from './pages/auth/RegisterComplete';
 import ForgotPassword from './pages/auth/ForgotPassword';
 import Home from './pages/Home';
 import Header from './components/nav/Header';
+// user
 import History from './pages/user/History';
 import NotFoundPage from './pages/NotFoundPage';
 import Password from './pages/user/Password';
 import Wishlist from './pages/user/Wishlist';
-// protected route
+// admin
+import AdminDashboard from './pages/admin/AdminDashboard';
+// protected route user
 import UserRoute from './components/routes/UserRoute';
+// protected route admin
+import AdminRoute from './components/routes/AdminRoute';
 // firebase
 import { auth } from './firebase';
 // redux
@@ -49,7 +54,7 @@ const App = () => {
 		});
 		// cleanup
 		return () => unsubcriber();
-	}, []);
+	}, [dispatch]);
 	return (
 		<>
 			<Header />
@@ -63,7 +68,7 @@ const App = () => {
 				<Route exact path="/user/password" component={Password} />
 				<Route exact path="/user/wishlist" component={Wishlist} />
 				<UserRoute exact path="/user/history" component={History} />
-
+				<AdminRoute exact path="/admin/dashboard" component={AdminDashboard} />
 				<Route path="*" component={NotFoundPage} />
 			</Switch>
 		</>

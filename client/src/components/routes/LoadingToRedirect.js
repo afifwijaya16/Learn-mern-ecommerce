@@ -13,7 +13,7 @@ const LoadingToRedirect = () => {
 		count === 0 && history.push('/');
 		// cleanup
 		return () => clearInterval(interval);
-	}, [count]);
+	}, [count, history]);
 
 	return (
 		<div className="text-center">
