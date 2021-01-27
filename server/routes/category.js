@@ -13,7 +13,7 @@ const {
 // route
 router.post('/category', authCheck, adminCheck, create);
 router.get('/category', list);
-router.get('/category/:slug', authCheck, adminCheck, read);
+router.get('/category/:slug', read);
 router.put('/category/:slug', authCheck, adminCheck, update);
 router.delete('/category/:slug', authCheck, adminCheck, remove);
 module.exports = router;

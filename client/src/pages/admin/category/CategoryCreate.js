@@ -10,11 +10,18 @@ import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
+
+import CategoryForm from '../../../components/form/CategoryForm';
+import LocalSearch from '../../../components/form/LocalSearch';
+
 const CategoryCreate = () => {
 	const { user } = useSelector((state) => ({ ...state }));
 	const [name, setName] = useState('');
 	const [loading, setLoading] = useState(false);
 	const [categories, setCategories] = useState([]);
+
+	// search and filter 1
+	const [keyword, setKeyword] = useState('');
 
 	useEffect(() => {
 		loadCategories();
@@ -56,22 +63,8 @@ const CategoryCreate = () => {
 				});
 		}
 	};
-	const categoryForm = () => (
-		<form onSubmit={handleSubmit}>
-			<div className="form-group">
-				<label>Name</label>
-				<input
-					type="text"
-					className="form-control"
-					onChange={(e) => setName(e.target.value)}
-					value={name}
-					autoFocus
-					required
-				/>
-			</div>
-			<button className="btn btn-primary">Save</button>
-		</form>
-	);
+
+	const searched = (keyword) => (c) => c.name.toLowerCase().includes(keyword);
 	return (
 		<div className="container-fluid">
 			<div className="row">
@@ -80,9 +73,18 @@ const CategoryCreate = () => {
 				</div>
 				<div className="col mt-1">
 					{loading ? <h4>Loading...</h4> : <h4>Category</h4>}
-					<div className="col-md-12">{categoryForm()}</div>
+					<div className="col-md-12">
+						<CategoryForm
+							handleSubmit={handleSubmit}
+							name={name}
+							setName={setName}
+						/>
+					</div>
 					<hr />
-					{categories.map((cat) => (
+					<LocalSearch keyword={keyword} setKeyword={setKeyword} />
+					<hr />
+					{/* Edit for serach {categories.map((cat) => ( */}
+					{categories.filter(searched(keyword)).map((cat) => (
 						<div className="alert alert-secondary" key={cat._id}>
 							{cat.name}{' '}
 							<span
