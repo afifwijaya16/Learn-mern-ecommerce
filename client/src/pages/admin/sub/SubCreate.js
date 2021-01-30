@@ -1,11 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import AdminNav from '../../../components/nav/AdminNav';
 import { toast } from 'react-toastify';
-import {
-	createCategory,
-	getCategories,
-	removeCategory,
-} from '../../../functions/category';
+import { createSub, getSubs, removeSub } from '../../../functions/sub';
+import { getCategories } from '../../../functions/category';
 import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
@@ -14,17 +11,20 @@ import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import CategoryForm from '../../../components/form/CategoryForm';
 import LocalSearch from '../../../components/form/LocalSearch';
 
-const CategoryCreate = () => {
+const SubCreate = () => {
 	const { user } = useSelector((state) => ({ ...state }));
 	const [name, setName] = useState('');
 	const [loading, setLoading] = useState(false);
 	const [categories, setCategories] = useState([]);
+	const [category, setCategory] = useState('');
+	const [subs, setSubs] = useState([]);
 
 	// search and filter 1
 	const [keyword, setKeyword] = useState('');
 
 	useEffect(() => {
 		loadCategories();
+		loadSubs();
 	}, []);
 
 	const loadCategories = () =>
@@ -32,15 +32,17 @@ const CategoryCreate = () => {
 			setCategories(dataCategories.data)
 		);
 
+	const loadSubs = () => getSubs().then((dataSubs) => setSubs(dataSubs.data));
+
 	const handleSubmit = (e) => {
 		e.preventDefault();
 		setLoading(true);
-		createCategory({ name }, user.token)
+		createSub({ name, parent: category }, user.token)
 			.then((res) => {
 				setLoading(false);
 				setName('');
 				toast.success(`${res.data.name} is created`);
-				loadCategories();
+				loadSubs();
 			})
 			.catch((err) => {
 				setLoading(false);
@@ -51,11 +53,11 @@ const CategoryCreate = () => {
 	const handleRemove = async (slug) => {
 		if (window.confirm('Delete')) {
 			setLoading(true);
-			removeCategory(slug, user.token)
+			removeSub(slug, user.token)
 				.then((res) => {
 					setLoading(false);
 					toast.success(`${res.data.name} is deleted`);
-					loadCategories();
+					loadSubs();
 				})
 				.catch((err) => {
 					setLoading(false);
@@ -72,8 +74,24 @@ const CategoryCreate = () => {
 					<AdminNav />
 				</div>
 				<div className="col mt-1">
-					{loading ? <h4>Loading...</h4> : <h4>Category</h4>}
+					{loading ? <h4>Loading...</h4> : <h4>Sub Category</h4>}
 					<div className="col-md-12">
+						<div className="form-group">
+							<label>Category</label>
+							<select
+								name="category"
+								className="form-control"
+								onChange={(e) => setCategory(e.target.value)}
+							>
+								<option>Choise Category</option>
+								{categories.length > 0 &&
+									categories.map((c) => (
+										<option key={c._id} value={c._id}>
+											{c.name}
+										</option>
+									))}
+							</select>
+						</div>
 						<CategoryForm
 							handleSubmit={handleSubmit}
 							name={name}
@@ -83,16 +101,17 @@ const CategoryCreate = () => {
 					<hr />
 					<LocalSearch keyword={keyword} setKeyword={setKeyword} />
 					<hr />
-					{categories.filter(searched(keyword)).map((cat) => (
+
+					{subs.filter(searched(keyword)).map((cat) => (
 						<div className="alert alert-secondary" key={cat._id}>
-							{cat.name}{' '}
+							{cat.name}
 							<span
 								className="btn btn-sm float-right"
 								onClick={() => handleRemove(cat.slug)}
 							>
 								<DeleteOutlined className="text-danger" />
-							</span>{' '}
-							<Link to={`/admin/category/${cat.slug}`}>
+							</span>
+							<Link to={`/admin/sub/${cat.slug}`}>
 								<span className="btn btn-sm float-right">
 									<EditOutlined className="text-warning" />
 								</span>
@@ -104,4 +123,4 @@ const CategoryCreate = () => {
 		</div>
 	);
 };
-export default CategoryCreate;
+export default SubCreate;
