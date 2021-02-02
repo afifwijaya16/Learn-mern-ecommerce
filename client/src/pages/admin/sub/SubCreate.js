@@ -41,6 +41,7 @@ const SubCreate = () => {
 			.then((res) => {
 				setLoading(false);
 				setName('');
+				setCategory('');
 				toast.success(`${res.data.name} is created`);
 				loadSubs();
 			})
@@ -56,6 +57,7 @@ const SubCreate = () => {
 			removeSub(slug, user.token)
 				.then((res) => {
 					setLoading(false);
+					setCategory('');
 					toast.success(`${res.data.name} is deleted`);
 					loadSubs();
 				})
@@ -81,9 +83,10 @@ const SubCreate = () => {
 							<select
 								name="category"
 								className="form-control"
+								value={category}
 								onChange={(e) => setCategory(e.target.value)}
 							>
-								<option>Choise Category</option>
+								<option value="">Choise Category</option>
 								{categories.length > 0 &&
 									categories.map((c) => (
 										<option key={c._id} value={c._id}>

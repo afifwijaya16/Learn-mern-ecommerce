@@ -22,6 +22,7 @@ import AdminDashboard from './pages/admin/AdminDashboard';
 import CategoryCreate from './pages/admin/category/CategoryCreate';
 import CategoryUpdate from './pages/admin/category/CategoryUpdate';
 import SubCreate from './pages/admin/sub/SubCreate';
+import SubUpdate from './pages/admin/sub/SubUpdate';
 // protected route user
 import UserRoute from './components/routes/UserRoute';
 // protected route admin
@@ -79,6 +80,7 @@ const App = () => {
 					path="/admin/category/:slug"
 					component={CategoryUpdate}
 				/>
+				<AdminRoute exact path="/admin/sub/:slug" component={SubUpdate} />
 				<Route path="*" component={NotFoundPage} />
 			</Switch>
 		</>
